@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local visitor count (dev only)
+/.data/
+
+# notes for AI coding tools (kept locally, not part of the site)
+AGENTS.md
+CLAUDE.md
+.claude/
