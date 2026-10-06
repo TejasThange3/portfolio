@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Geist_Mono, Tiro_Devanagari_Marathi } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Intro } from "@/components/intro";
+import { SiteAnalytics } from "@/components/site-analytics";
 import { person } from "@/content/site";
 import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
@@ -83,7 +83,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Header />
         <main>{children}</main>
         <Footer />
-        <Analytics />
+        <SiteAnalytics />
       </body>
     </html>
   );
