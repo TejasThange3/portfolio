@@ -32,7 +32,7 @@ function load(): Promise<Result | null> {
     try {
       if (store(ME_KEY) === "1") {
         const { total } = (await (await fetch("/api/visit")).json()) as { total: number | null };
-        return total ? { kind: "total", n: total } : null;
+        return total === null ? null : { kind: "total", n: total };
       }
       let id = store(ID_KEY);
       if (!id) { id = crypto.randomUUID(); store(ID_KEY, id); }
