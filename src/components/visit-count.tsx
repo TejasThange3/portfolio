@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 // Open the site once with ?notme to stop counting this browser (it then shows the total instead);
 // ?countme undoes that.
 
-type Result = { kind: "new" | "back"; n: number } | { kind: "total"; n: number };
+type Result = { kind: "new"; n: number } | { kind: "back"; n: number; total: number } | { kind: "total"; n: number };
 
 const ID_KEY = "visitor-id";
 const ME_KEY = "visitor-notme";
@@ -40,8 +40,9 @@ function load(): Promise<Result | null> {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
-      })).json()) as { n: number | null; returning?: boolean };
-      return res.n ? { kind: res.returning ? "back" : "new", n: res.n } : null;
+      })).json()) as { n: number | null; total?: number; returning?: boolean };
+      if (!res.n) return null;
+      return res.returning ? { kind: "back", n: res.n, total: Math.max(res.total ?? res.n, res.n) } : { kind: "new", n: res.n };
     } catch {
       return null;
     }
@@ -109,9 +110,14 @@ export function VisitCount() {
   const label = result.n.toLocaleString("en-IN");
   const nth = `${label}${ordinal(result.n)}`;
   const people = result.n === 1 ? "person has" : "people have";
+  // a returning visitor also sees how many have come by in all
+  const all = result.kind === "back" ? result.total : 0;
+  const allNum = (
+    <span className="visit-num font-mono font-medium"><Odometer value={all} on={on} /></span>
+  );
   const said =
     result.kind === "new" ? `You're the ${nth} person to stop by.` :
-    result.kind === "back" ? `Welcome back. You were the ${nth}.` :
+    result.kind === "back" ? `Welcome back. You were the ${nth} of ${all.toLocaleString("en-IN")}.` :
     `${label} ${people} stopped by.`;
 
   return (
@@ -119,7 +125,7 @@ export function VisitCount() {
       {/* the rolling digits are for the eye; screen readers get the plain sentence */}
       <span aria-hidden>
         {result.kind === "new" && <>You&apos;re the {num} person to stop by.</>}
-        {result.kind === "back" && <>Welcome back. You were the {num}.</>}
+        {result.kind === "back" && <>Welcome back. You were the {num} of {allNum}.</>}
         {result.kind === "total" && <>{num} {people} stopped by.</>}
       </span>
       <span className="sr-only">{said}</span>
