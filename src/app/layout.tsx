@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Geist_Mono, Tiro_Devanagari_Marathi } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Intro } from "@/components/intro";
@@ -82,6 +83,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Header />
         <main>{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
