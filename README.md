@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tejas Thange — portfolio
 
-## Getting Started
+My personal site: the projects I've built, where I've worked, and a page of things I like outside of work.
 
-First, run the development server:
+Built with Next.js 16 (App Router), React 19, Tailwind CSS v4 and Motion.
+
+## What's in it
+
+- **Home, Work, Experience, Space** — four pages, with case studies for the main ML projects under `/work/[slug]`.
+- **Playground** — a small CNN that reads hand-drawn digits right in the browser, with a slider that lowers the weight precision so you can see when it starts getting them wrong.
+- **The terrain lines** — my name drawn as a relief map of lines, in the intro and the footer (canvas, no libraries).
+- **A message form** on the Space page, sent through [Resend](https://resend.com).
+- **A visitor counter** that counts each browser once, stored in Upstash Redis.
+
+## Run it locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Put these in `.env.local` locally, and in the project's settings on Vercel.
 
-## Learn More
+| Variable | What it's for |
+| --- | --- |
+| `RESEND_API_KEY` | Sending messages from the form |
+| `CONTACT_EMAIL` | Where those messages go |
+| `KV_REST_API_URL`, `KV_REST_API_TOKEN` | The visitor count (added automatically when Upstash Redis is connected on Vercel). Without them, the count lives in `.data/` locally and is hidden in production |
+| `NEXT_PUBLIC_SITE_URL` | Optional. The site's address once it has a custom domain; Vercel's address is used until then |
 
-To learn more about Next.js, take a look at the following resources:
+## Project layout
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/app` — pages, API routes (`api/ask`, `api/visit`), icons, link-preview image, sitemap and robots
+- `src/components` — everything on the pages
+- `src/content` — the words: projects, experience, quotes, films, books
+- `public` — images, the résumé, and the Playground model's weights
